@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model1stModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="Model1stModelStoreContainer">
+    <EntitySet Name="StudentSet" EntityType="Model1stModel.Store.StudentSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BookSet" EntityType="Model1stModel.Store.BookSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="StudentBookOrderSet" EntityType="Model1stModel.Store.StudentBookOrderSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="StudentBookOrderBook" EntityType="Model1stModel.Store.StudentBookOrderBook" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="StudentStudentBookOrder" Association="Model1stModel.Store.StudentStudentBookOrder">
+      <End Role="Student" EntitySet="StudentSet" />
+      <End Role="StudentBookOrder" EntitySet="StudentBookOrderSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentBookOrderBook_StudentBookOrder" Association="Model1stModel.Store.FK_StudentBookOrderBook_StudentBookOrder">
+      <End Role="StudentBookOrder" EntitySet="StudentBookOrderSet" />
+      <End Role="StudentBookOrderBook" EntitySet="StudentBookOrderBook" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentBookOrderBook_Book" Association="Model1stModel.Store.FK_StudentBookOrderBook_Book">
+      <End Role="Book" EntitySet="BookSet" />
+      <End Role="StudentBookOrderBook" EntitySet="StudentBookOrderBook" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="StudentSet">
+    <Key>
+      <PropertyRef Name="No" />
+    </Key>
+    <Property Name="No" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" DefaultValue="" MaxLength="100" />
+    <Property Name="Age" Type="smallint" Nullable="true" />
+  </EntityType>
+  <EntityType Name="BookSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="BookName" Type="nvarchar" Nullable="true" DefaultValue="" MaxLength="30" />
+    <Property Name="Price" Type="decimal" Nullable="false" DefaultValue="0" Precision="4" />
+  </EntityType>
+  <EntityType Name="StudentBookOrderSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Amount" Type="decimal" Nullable="false" DefaultValue="0" Precision="4" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="StudentNo" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="StudentBookOrderBook">
+    <Key>
+      <PropertyRef Name="StudentBookOrder_Id" />
+      <PropertyRef Name="Book_Id" />
+    </Key>
+    <Property Name="StudentBookOrder_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Book_Id" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <Association Name="StudentStudentBookOrder">
+    <End Role="Student" Type="Model1stModel.Store.StudentSet" Multiplicity="1" />
+    <End Role="StudentBookOrder" Type="Model1stModel.Store.StudentBookOrderSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="No" />
+      </Principal>
+      <Dependent Role="StudentBookOrder">
+        <PropertyRef Name="StudentNo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentBookOrderBook_StudentBookOrder">
+    <End Role="StudentBookOrder" Type="Model1stModel.Store.StudentBookOrderSet" Multiplicity="1" />
+    <End Role="StudentBookOrderBook" Type="Model1stModel.Store.StudentBookOrderBook" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StudentBookOrder">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StudentBookOrderBook">
+        <PropertyRef Name="StudentBookOrder_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentBookOrderBook_Book">
+    <End Role="StudentBookOrderBook" Type="Model1stModel.Store.StudentBookOrderBook" Multiplicity="*" />
+    <End Role="Book" Type="Model1stModel.Store.BookSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Book">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StudentBookOrderBook">
+        <PropertyRef Name="Book_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model1stModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="Model1stModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="StudentSet" EntityType="Model1stModel.Student" />
+          <EntitySet Name="BookSet" EntityType="Model1stModel.Book" />
+          <EntitySet Name="StudentBookOrderSet" EntityType="Model1stModel.StudentBookOrder" />
+          <AssociationSet Name="StudentStudentBookOrder" Association="Model1stModel.StudentStudentBookOrder">
+            <End Role="Student" EntitySet="StudentSet" />
+            <End Role="StudentBookOrder" EntitySet="StudentBookOrderSet" />
+          </AssociationSet>
+          <AssociationSet Name="StudentBookOrderBook" Association="Model1stModel.StudentBookOrderBook">
+            <End Role="StudentBookOrder" EntitySet="StudentBookOrderSet" />
+            <End Role="Book" EntitySet="BookSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="No" />
+          </Key>
+          <Property Name="No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" FixedLength="false" MaxLength="100" DefaultValue="" Unicode="true" />
+          <Property Name="Age" Type="Int16" />
+          <NavigationProperty Name="StudentBookOrder" Relationship="Model1stModel.StudentStudentBookOrder" FromRole="Student" ToRole="StudentBookOrder" />
+        </EntityType>
+        <EntityType Name="Book">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="BookName" Type="String" DefaultValue="" MaxLength="30" />
+          <Property Name="Price" Type="Decimal" Nullable="false" DefaultValue="0" Precision="4" />
+          <NavigationProperty Name="StudentBookOrder" Relationship="Model1stModel.StudentBookOrderBook" FromRole="Book" ToRole="StudentBookOrder" />
+        </EntityType>
+        <EntityType Name="StudentBookOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" DefaultValue="0" Precision="4" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Student" Relationship="Model1stModel.StudentStudentBookOrder" FromRole="StudentBookOrder" ToRole="Student" />
+          <Property Name="StudentNo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Book" Relationship="Model1stModel.StudentBookOrderBook" FromRole="StudentBookOrder" ToRole="Book" />
+        </EntityType>
+        <Association Name="StudentStudentBookOrder">
+          <End Type="Model1stModel.Student" Role="Student" Multiplicity="1" />
+          <End Type="Model1stModel.StudentBookOrder" Role="StudentBookOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="No" />
+            </Principal>
+            <Dependent Role="StudentBookOrder">
+              <PropertyRef Name="StudentNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="StudentBookOrderBook">
+          <End Type="Model1stModel.StudentBookOrder" Role="StudentBookOrder" Multiplicity="*" />
+          <End Type="Model1stModel.Book" Role="Book" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Model1stModelStoreContainer" CdmEntityContainer="Model1stModelContainer">
+    <EntitySetMapping Name="StudentSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1stModel.Student)">
+        <MappingFragment StoreEntitySet="StudentSet">
+          <ScalarProperty Name="No" ColumnName="No" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Age" ColumnName="Age" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BookSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1stModel.Book)">
+        <MappingFragment StoreEntitySet="BookSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="BookName" ColumnName="BookName" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StudentBookOrderSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1stModel.StudentBookOrder)">
+        <MappingFragment StoreEntitySet="StudentBookOrderSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="StudentNo" ColumnName="StudentNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="StudentBookOrderBook" TypeName="Model1stModel.StudentBookOrderBook" StoreEntitySet="StudentBookOrderBook">
+      <EndProperty Name="StudentBookOrder">
+        <ScalarProperty Name="Id" ColumnName="StudentBookOrder_Id" />
+      </EndProperty>
+      <EndProperty Name="Book">
+        <ScalarProperty Name="Id" ColumnName="Book_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
