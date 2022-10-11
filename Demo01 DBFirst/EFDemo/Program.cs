@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace EFDemo
             Test(TestQuery);
             Test(TestUpdate);
             Test(TestInsert);
+            Test(TestInsertEntry);
 
             Console.WriteLine("Press Any Key To Exit!");
             Console.ReadKey(); 
@@ -22,11 +24,13 @@ namespace EFDemo
 
         static void Test(Action testAction)
         {
-            if(testAction == null)
+            Console.WriteLine();
+            if (testAction == null)
             {
                 Console.WriteLine("testAction 不可为Null!");
                 Console.WriteLine();
             }
+            Console.WriteLine("===========================");
             Console.WriteLine($"--->>>{string.Join("-", testAction.GetInvocationList().Select(p => p.Method.Name))}");
             testAction.Invoke();
         }
@@ -106,6 +110,25 @@ namespace EFDemo
                 ctx.SaveChanges();
             }
 
+        }
+
+        static void TestInsertEntry()
+        {
+            Customers insertedCustomer = null;
+            using (var ctx = new EFDemo.NorthwindEntities())
+            {
+                var cloneCustomer = insertedCustomer = ctx.Customers.First().Clone<Customers>();
+                cloneCustomer.CustomerID = "AAAAA";
+
+                DbEntityEntry<Customers> dbEntityEntry = ctx.Entry<Customers>(cloneCustomer);
+                dbEntityEntry.State = System.Data.Entity.EntityState.Added;
+                ctx.SaveChanges();
+            }
+
+            TestQuery(p => p.CustomerID == insertedCustomer.CustomerID);
+            Console.WriteLine("--->>>Restore");
+            TestDelete(p => p.CustomerID == insertedCustomer.CustomerID);
+            TestQuery(p => p.CustomerID == insertedCustomer.CustomerID);
         }
     }
 
